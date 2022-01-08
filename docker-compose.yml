@@ -1,0 +1,30 @@
+version: "3.2"
+
+services:
+  proxy_server:
+    image: nginx:1.21.5
+    container_name: proxy_server
+    volumes: 
+      - ./proxy_server/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./proxy_server/static:/var/html/www/static
+    ports: 
+      - "80:80"
+    networks:
+      - docker_separation_dynamic_static
+
+
+  backend_server:
+    image: nginx:1.21.5
+    container_name: backend_server
+    volumes: 
+      - ./backend_server/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./backend_server/static:/var/html/www/static
+    expose:
+      - 80
+    networks:
+      - docker_separation_dynamic_static
+
+
+networks:
+  docker_separation_dynamic_static:
+    driver: bridge
